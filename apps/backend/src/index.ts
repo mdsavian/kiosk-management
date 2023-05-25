@@ -1,9 +1,15 @@
+import connectDB from "./database/connection";
 import { createServer } from "./server";
-import { log } from "logger";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const port = process.env.PORT || 5001;
+
+connectDB();
+
 const server = createServer();
 
 server.listen(port, () => {
-  log(`Backend api is running on ${port}`);
+  console.log(`Backend api is running on ${port}`);
 });

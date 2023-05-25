@@ -18,7 +18,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.17.1",
-    "logger": "*"
+    "logger": "*",
+    "mongoose": "^7.2.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",

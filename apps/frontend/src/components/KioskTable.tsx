@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as moment from "moment";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import {
@@ -14,6 +13,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { KioskDTO } from "types";
+import * as dayjs from "dayjs";
 
 type Props = {
   kiosks: KioskDTO[];
@@ -60,8 +60,8 @@ const KioskTable: React.FC<Props> = ({ kiosks, handleDelete }) => {
                   {kiosk.description}
                 </TableCell>
                 <TableCell>{kiosk.isKioskClosed ? "Yes" : "No"}</TableCell>
-                <TableCell>{moment(kiosk.storeOpensAt).format("LT")}</TableCell>
-                <TableCell>{moment(kiosk.storeClosesAt).format("LT")}</TableCell>
+                <TableCell>{dayjs(kiosk.storeOpensAt).format("YYYY-MM-DD HH:mm")}</TableCell>
+                <TableCell>{dayjs(kiosk.storeClosesAt).format("YYYY-MM-DD HH:mm")}</TableCell>
                 <TableCell>
                   {
                     <IconButton onClick={handleEdit}>

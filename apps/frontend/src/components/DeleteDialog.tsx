@@ -9,6 +9,7 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import useKiosks from "../hooks/useKiosks";
 import { KioskDTO } from "types";
+import { SnackbarContext } from "./commons/SnackBar/SnackbarProvider";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -26,12 +27,12 @@ type Props = {
 };
 const DeleteDialog: React.FC<Props> = ({ kioskId, handleClose, setKiosks }) => {
   const { deleteKiosk } = useKiosks();
+  const displaySnackbar = React.useContext(SnackbarContext);
 
   const handleDelete = () => {
     deleteKiosk(kioskId)
       .then((response) => {
-        // TODO customize the alert
-        alert(response.data.message);
+        displaySnackbar(response.data.message, "success");
 
         setKiosks((prevState) => prevState.filter((kiosk) => kiosk._id !== kioskId));
 
@@ -39,8 +40,7 @@ const DeleteDialog: React.FC<Props> = ({ kioskId, handleClose, setKiosks }) => {
       })
       .catch((error) => {
         handleClose();
-        // TODO customize the alert
-        alert(error.response.data);
+        displaySnackbar(error.response.data, "error");
       });
   };
 

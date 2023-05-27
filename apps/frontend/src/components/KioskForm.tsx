@@ -13,6 +13,7 @@ import TimePicker from "./CustomTimePicker";
 import { KioskDTO } from "types";
 import * as dayjs from "dayjs";
 import useKiosks from "../hooks/useKiosks";
+import { SnackbarContext } from "./commons/SnackBar/SnackbarProvider";
 
 type Props = {
   kiosk?: KioskDTO;
@@ -22,6 +23,7 @@ type Props = {
 
 const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
   const { createKiosk, updateKiosk } = useKiosks();
+  const displaySnackbar = React.useContext(SnackbarContext);
 
   const initKiosk: KioskDTO = kiosk || {
     storeClosesAt: dayjs(new Date()).add(1, "minutes").toDate(),
@@ -45,26 +47,24 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
             prevState.map((prev) => (prev._id === newKiosk._id ? response.data.data : prev))
           );
 
-          // TODO customize the alert
-          alert("Kiosk updated successfully");
+          displaySnackbar("Kiosk updated successfully", "success");
+
           handleClose();
         })
         .catch((error) => {
-          // TODO customize the alert
-          alert(error.response.data);
+          displaySnackbar(error.response.data, "error");
         });
     } else {
       await createKiosk(newKiosk)
         .then((response) => {
           setKiosks((prevState) => [...prevState, response.data.data]);
 
-          // TODO customize the alert
-          alert("Kiosk created successfully");
+          displaySnackbar("Kiosk created successfully", "success");
+
           handleClose();
         })
         .catch((error) => {
-          // TODO customize the alert
-          alert(error.response.data);
+          displaySnackbar(error.response.data, error);
         });
     }
   };

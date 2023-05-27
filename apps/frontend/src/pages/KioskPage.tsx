@@ -5,7 +5,8 @@ import KioskTable from "../components/KioskTable";
 import DeleteDialog from "../components/DeleteDialog";
 import { Alert, Button } from "@mui/material";
 import KioskForm from "../components/KioskForm";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/commons/LoadingSpinner";
+import CustomSnackbar from "../components/commons/SnackBar";
 
 function KioskPage() {
   const { fetchKiosks } = useKiosks();
@@ -16,6 +17,7 @@ function KioskPage() {
   const [deleteKioskId, setDeleteKioskId] = React.useState<string>("");
   const [openKioskForm, setOpenKioskForm] = React.useState<boolean>(false);
   const [kioskToEdit, setKioskToEdit] = React.useState<KioskDTO | undefined>(undefined);
+  const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
 
   const handleDelete = (kioskId: string) => {
     setDeleteKioskId(kioskId);

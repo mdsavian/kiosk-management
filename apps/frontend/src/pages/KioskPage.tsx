@@ -3,8 +3,9 @@ import { KioskDTO } from "types";
 import useKiosks from "../hooks/useKiosks";
 import KioskTable from "../components/KioskTable";
 import DeleteDialog from "../components/DeleteDialog";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import KioskForm from "../components/KioskForm";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function KioskPage() {
   const { fetchKiosks } = useKiosks();
@@ -42,7 +43,11 @@ function KioskPage() {
   }, []);
 
   if (isLoading) {
-    return "Loading Spinner TODO";
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <Alert severity="error">Error fetching kiosks</Alert>;
   }
 
   return (
@@ -69,9 +74,7 @@ function KioskPage() {
         />
       )}
 
-      {error && "Message error TODO"}
-
-      {kiosks.length === 0 && "Message empty TODO"}
+      {kiosks.length === 0 && <Alert severity="warning">Kiosks not found</Alert>}
 
       {!isLoading && !error && kiosks.length > 0 && (
         <KioskTable kiosks={kiosks} handleDelete={handleDelete} handleEdit={handleEdit} />

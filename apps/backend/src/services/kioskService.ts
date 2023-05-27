@@ -16,11 +16,11 @@ class KioskService {
   async update(id: string, kioskDto: KioskDTO) {
     let kioskToUpdate = kioskDto;
 
-    if (!kioskToUpdate.serialKey) {
+    if (kioskToUpdate.serialKey === undefined) {
       delete kioskToUpdate.serialKey;
     }
 
-    if (!kioskToUpdate.description) {
+    if (kioskToUpdate.description === undefined) {
       delete kioskToUpdate.description;
     }
 

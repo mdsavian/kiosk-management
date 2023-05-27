@@ -16,40 +16,59 @@ import useKiosks from "../hooks/useKiosks";
 
 type Props = {
   kiosk?: KioskDTO;
-  open: boolean;
   handleCancel: () => void;
   setKiosks: React.Dispatch<React.SetStateAction<KioskDTO[]>>;
 };
 
-const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel, setKiosks }) => {
-  const { createKiosk } = useKiosks();
+const KioskForm: React.FC<Props> = ({ kiosk, handleCancel, setKiosks }) => {
+  const { createKiosk, updateKiosk } = useKiosks();
+
+  console.log(kiosk);
 
   const initKiosk: KioskDTO = kiosk || {
     storeClosesAt: dayjs(new Date()).add(1, "minutes").toDate(),
     storeOpensAt: dayjs(new Date()).toDate(),
+    isKioskClosed: false,
   };
 
-  const [newKiosk, setNewKiosk] = React.useState<KioskDTO | undefined>(initKiosk);
+  const [newKiosk, setNewKiosk] = React.useState<KioskDTO>(initKiosk);
   const isEditing = !!kiosk?._id;
   const title = isEditing ? "Edit" : "Create";
 
-  const handleCreateKiosk = async () => {
+  const handleSubmit = async () => {
     if (!newKiosk) {
       return;
     }
 
-    await createKiosk(newKiosk)
-      .then((response) => {
-        setKiosks((prevState) => [...prevState, response.data.data]);
+    if (isEditing) {
+      await updateKiosk(newKiosk)
+        .then((response) => {
+          setKiosks((prevState) =>
+            prevState.map((prev) => (prev._id === newKiosk._id ? response.data.data : prev))
+          );
 
-        // TODO customize the alert
-        alert("Kiosk created successfully");
-        closeDialog();
-      })
-      .catch((error) => {
-        // TODO customize the alert
-        alert(error.response.data);
-      });
+          // TODO customize the alert
+          alert("Kiosk updated successfully");
+          handleCancel();
+        })
+        .catch((error) => {
+          // TODO customize the alert
+          alert(error.response.data);
+        });
+    } else {
+      await createKiosk(newKiosk)
+        .then((response) => {
+          setKiosks((prevState) => [...prevState, response.data.data]);
+
+          // TODO customize the alert
+          alert("Kiosk created successfully");
+          handleCancel();
+        })
+        .catch((error) => {
+          // TODO customize the alert
+          alert(error.response.data);
+        });
+    }
   };
 
   const handleChangeKiosk = (field: Partial<KioskDTO>) => {
@@ -61,13 +80,8 @@ const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel, setKiosks }) =>
     });
   };
 
-  const closeDialog = () => {
-    setNewKiosk(undefined);
-    handleCancel();
-  };
-
   return (
-    <Dialog open={open} onClose={closeDialog}>
+    <Dialog open onClose={handleCancel}>
       <DialogTitle>{title} Kiosk</DialogTitle>
       <DialogContent>
         <TextField
@@ -91,7 +105,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel, setKiosks }) =>
         <FormControlLabel
           control={
             <Switch
-              checked={newKiosk?.isKioskClosed ?? false}
+              checked={newKiosk?.isKioskClosed}
               onChange={(event) => {
                 handleChangeKiosk({ isKioskClosed: event.target.checked });
               }}
@@ -118,13 +132,8 @@ const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel, setKiosks }) =>
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button
-          disabled={!newKiosk}
-          onClick={handleCreateKiosk}
-          variant="contained"
-          color="success"
-        >
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button disabled={!newKiosk} onClick={handleSubmit} variant="contained" color="success">
           Save
         </Button>
       </DialogActions>

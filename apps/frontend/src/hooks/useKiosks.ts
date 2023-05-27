@@ -16,7 +16,11 @@ const useKiosks = () => {
     return await axios.post(KIOSK_URL, kiosk);
   };
 
-  return { fetchKiosks, deleteKiosk, createKiosk };
+  const updateKiosk = async (kiosk: Partial<KioskDTO>) => {
+    return await axios.patch(`${KIOSK_URL}/${kiosk._id}`, kiosk);
+  };
+
+  return { fetchKiosks, deleteKiosk, createKiosk, updateKiosk };
 };
 
 export default useKiosks;

@@ -18,6 +18,7 @@ import * as dayjs from "dayjs";
 type Props = {
   kiosks: KioskDTO[];
   handleDelete: (kioskId: string) => void;
+  handleEdit: (kioskId: string) => void;
 };
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -30,11 +31,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const KioskTable: React.FC<Props> = ({ kiosks, handleDelete }) => {
-  const handleEdit = () => {
-    console.log("edit");
-  };
-
+const KioskTable: React.FC<Props> = ({ kiosks, handleDelete, handleEdit }) => {
   return (
     <>
       <TableContainer component={Paper}>
@@ -64,7 +61,7 @@ const KioskTable: React.FC<Props> = ({ kiosks, handleDelete }) => {
                 <TableCell>{dayjs(kiosk.storeClosesAt).format("LT")}</TableCell>
                 <TableCell>
                   {
-                    <IconButton onClick={handleEdit}>
+                    <IconButton onClick={() => handleEdit(kiosk._id!)}>
                       <EditIcon />
                     </IconButton>
                   }

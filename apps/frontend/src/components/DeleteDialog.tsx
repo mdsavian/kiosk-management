@@ -26,10 +26,12 @@ type Props = {
   setKiosks: React.Dispatch<React.SetStateAction<KioskDTO[]>>;
 };
 const DeleteDialog: React.FC<Props> = ({ kioskId, handleClose, setKiosks }) => {
-  const { deleteKiosk } = useKiosks();
   const displaySnackbar = React.useContext(SnackbarContext);
+  const isProcessing = React.useRef(false);
+  const { deleteKiosk } = useKiosks();
 
   const handleDelete = () => {
+    isProcessing.current = true;
     deleteKiosk(kioskId)
       .then((response) => {
         displaySnackbar(response.data.message, "success");
@@ -59,8 +61,15 @@ const DeleteDialog: React.FC<Props> = ({ kioskId, handleClose, setKiosks }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button sx={{ color: "red" }} onClick={handleDelete}>
+        <Button disabled={isProcessing.current} onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button
+          disabled={isProcessing.current}
+          variant="contained"
+          color="error"
+          onClick={handleDelete}
+        >
           Delete
         </Button>
       </DialogActions>

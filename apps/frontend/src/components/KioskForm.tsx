@@ -22,8 +22,9 @@ type Props = {
 };
 
 const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
-  const { createKiosk, updateKiosk } = useKiosks();
   const displaySnackbar = React.useContext(SnackbarContext);
+  const { createKiosk, updateKiosk } = useKiosks();
+  const isProcessing = React.useRef(false);
 
   const initKiosk: KioskDTO = kiosk || {
     storeClosesAt: dayjs(new Date()).add(1, "minutes").toDate(),
@@ -39,6 +40,8 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
     if (!newKiosk) {
       return;
     }
+
+    isProcessing.current = true;
 
     if (isEditing) {
       await updateKiosk(newKiosk)
@@ -130,8 +133,15 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button disabled={!newKiosk} onClick={handleSubmit} variant="contained" color="success">
+        <Button onClick={handleClose} disabled={isProcessing.current}>
+          Cancel
+        </Button>
+        <Button
+          disabled={isProcessing.current}
+          onClick={handleSubmit}
+          variant="contained"
+          color="success"
+        >
           Save
         </Button>
       </DialogActions>

@@ -84,13 +84,15 @@ function KioskPage() {
         <KioskTable kiosks={kiosks} handleDelete={handleDelete} handleEdit={handleEdit} />
       )}
 
-      <DeleteDialog
-        kioskId={deleteKioskId}
-        handleClose={() => {
-          setDeleteKioskId("");
-        }}
-        setKiosks={setKiosks}
-      />
+      {deleteKioskId && (
+        <DeleteDialog
+          kioskId={deleteKioskId}
+          handleClose={() => {
+            setDeleteKioskId("");
+          }}
+          setKiosks={setKiosks}
+        />
+      )}
     </>
   );
 }

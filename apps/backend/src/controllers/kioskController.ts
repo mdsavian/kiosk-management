@@ -72,7 +72,7 @@ class KioskController {
       const kioskDeleted = await KioskService.delete(id);
 
       if (kioskDeleted.deletedCount > 0) {
-        return res.status(200).send({ message: "Article delete successfully" });
+        return res.status(200).send({ message: "Kiosk deleted successfully" });
       } else {
         throw new Error("delete incompleted");
       }

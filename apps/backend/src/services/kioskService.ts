@@ -1,5 +1,6 @@
 import KioskModel from "../models/kiosk";
 import { KioskDTO } from "types";
+import moment from "moment";
 
 class KioskService {
   constructor() {}
@@ -23,7 +24,7 @@ class KioskService {
       delete kioskToUpdate.description;
     }
 
-    if (!kioskToUpdate.isKioskClosed) {
+    if (kioskToUpdate.isKioskClosed === undefined) {
       delete kioskToUpdate.isKioskClosed;
     }
 
@@ -50,7 +51,56 @@ class KioskService {
     return await KioskModel.create(kioskDTO);
   }
 
-  // TODO close manually
+  async openCloseKiosk() {
+    console.log("INIT open/close kiosks");
+    const kiosks = await this.getAll();
+
+    moment.locale("pt-br");
+
+    kiosks.forEach((kiosk) => {
+      if (!kiosk.storeClosesAt || !kiosk.storeOpensAt) {
+        return;
+      }
+      const isKioskOpen = this.kioskIsOpen(kiosk.storeOpensAt, kiosk.storeClosesAt);
+
+      console.log(
+        `current kiosk state, serialKey: ${kiosk.serialKey} isClosed: ${kiosk.isKioskClosed} isKioskOpen: ${isKioskOpen}`
+      );
+
+      if (isKioskOpen === kiosk.isKioskClosed) {
+        const newState = !kiosk.isKioskClosed;
+
+        console.log(
+          `UPDATING kiosk state serialKey: ${kiosk.serialKey} new state: ${
+            newState ? "CLOSED" : "OPEN"
+          }`
+        );
+
+        KioskModel.updateOne({ _id: kiosk._id }, { $set: { isKioskClosed: newState } })
+          .then(() => {
+            console.log(
+              `Kiosk state UPDATED serialKey: ${kiosk.serialKey} new state: ${
+                newState ? "CLOSED" : "OPEN"
+              }`
+            );
+          })
+          .catch((error) => {
+            console.error(`Error updating kiosk state serialKey: ${kiosk.serialKey} ${error}`);
+          });
+      }
+    });
+
+    console.log("END open/close kiosks");
+  }
+
+  kioskIsOpen(storeOpensAt: Date, storeClosesAt: Date): boolean {
+    const startMomentDate = moment(storeOpensAt, "YYYY-MM-DDTHH:mm:ss");
+    const endMomentDate = moment(storeClosesAt, "YYYY-MM-DDTHH:mm:ss");
+    const currentDate = moment();
+
+    // Check if the current date is between the start and end dates, include
+    return currentDate.isBetween(startMomentDate, endMomentDate, null, "[]");
+  }
 }
 
 export default new KioskService();

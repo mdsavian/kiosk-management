@@ -89,8 +89,6 @@ class KioskService {
           });
       }
     });
-
-    console.log("END open/close kiosks");
   }
 
   kioskIsOpen(storeOpensAt: Date, storeClosesAt: Date): boolean {
@@ -98,8 +96,12 @@ class KioskService {
     const endMomentDate = moment(storeClosesAt, "YYYY-MM-DDTHH:mm:ss");
     const currentDate = moment();
 
-    // Check if the current date is between the start and end dates, include
-    return currentDate.isBetween(startMomentDate, endMomentDate, null, "[]");
+    // Set the current date to compare correctly
+    startMomentDate.date(currentDate.date());
+    endMomentDate.date(currentDate.date());
+
+    // Check if the date/hour is between the start and end dates, include
+    return currentDate.isBetween(startMomentDate, endMomentDate, "minutes", "[]");
   }
 }
 

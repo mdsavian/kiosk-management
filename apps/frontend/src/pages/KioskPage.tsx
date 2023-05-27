@@ -60,7 +60,10 @@ function KioskPage() {
 
       {openKioskForm && (
         <KioskForm
-          handleCancel={() => setOpenKioskForm(false)}
+          handleClose={() => {
+            setOpenKioskForm(false);
+            setKioskToEdit(undefined);
+          }}
           setKiosks={setKiosks}
           kiosk={kioskToEdit}
         />

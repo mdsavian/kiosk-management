@@ -16,14 +16,12 @@ import useKiosks from "../hooks/useKiosks";
 
 type Props = {
   kiosk?: KioskDTO;
-  handleCancel: () => void;
+  handleClose: () => void;
   setKiosks: React.Dispatch<React.SetStateAction<KioskDTO[]>>;
 };
 
-const KioskForm: React.FC<Props> = ({ kiosk, handleCancel, setKiosks }) => {
+const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
   const { createKiosk, updateKiosk } = useKiosks();
-
-  console.log(kiosk);
 
   const initKiosk: KioskDTO = kiosk || {
     storeClosesAt: dayjs(new Date()).add(1, "minutes").toDate(),
@@ -49,7 +47,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleCancel, setKiosks }) => {
 
           // TODO customize the alert
           alert("Kiosk updated successfully");
-          handleCancel();
+          handleClose();
         })
         .catch((error) => {
           // TODO customize the alert
@@ -62,7 +60,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleCancel, setKiosks }) => {
 
           // TODO customize the alert
           alert("Kiosk created successfully");
-          handleCancel();
+          handleClose();
         })
         .catch((error) => {
           // TODO customize the alert
@@ -81,7 +79,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleCancel, setKiosks }) => {
   };
 
   return (
-    <Dialog open onClose={handleCancel}>
+    <Dialog open onClose={handleClose}>
       <DialogTitle>{title} Kiosk</DialogTitle>
       <DialogContent>
         <TextField
@@ -132,7 +130,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleCancel, setKiosks }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
         <Button disabled={!newKiosk} onClick={handleSubmit} variant="contained" color="success">
           Save
         </Button>

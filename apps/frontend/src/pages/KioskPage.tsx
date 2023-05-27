@@ -5,8 +5,8 @@ import KioskTable from "../components/KioskTable";
 import DeleteDialog from "../components/DeleteDialog";
 import { Alert, Button } from "@mui/material";
 import KioskForm from "../components/KioskForm";
-import LoadingSpinner from "../components/commons/LoadingSpinner";
-import CustomSnackbar from "../components/commons/SnackBar";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import CustomSnackbar from "../components/common/SnackBar";
 
 function KioskPage() {
   const { fetchKiosks } = useKiosks();

@@ -13,7 +13,7 @@ import TimePicker from "./CustomTimePicker";
 import { KioskDTO } from "types";
 import * as dayjs from "dayjs";
 import useKiosks from "../hooks/useKiosks";
-import { SnackbarContext } from "./commons/SnackBar/SnackbarProvider";
+import { SnackbarContext } from "./common/SnackBar/SnackbarProvider";
 
 type Props = {
   kiosk?: KioskDTO;

@@ -9,7 +9,7 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import useKiosks from "../hooks/useKiosks";
 import { KioskDTO } from "types";
-import { SnackbarContext } from "./commons/SnackBar/SnackbarProvider";
+import { SnackbarContext } from "./common/SnackBar/SnackbarProvider";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

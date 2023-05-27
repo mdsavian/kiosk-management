@@ -1,6 +1,7 @@
 import KioskModel from "../models/kiosk";
 import { KioskDTO } from "types";
-import moment from "moment";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 
 class KioskService {
   constructor() {}
@@ -55,7 +56,8 @@ class KioskService {
     console.log("INIT open/close kiosks");
     const kiosks = await this.getAll();
 
-    moment.locale("pt-br");
+    dayjs.locale("pt-br");
+    dayjs.extend(isBetween);
 
     kiosks.forEach((kiosk) => {
       if (!kiosk.storeClosesAt || !kiosk.storeOpensAt) {
@@ -92,16 +94,15 @@ class KioskService {
   }
 
   kioskIsOpen(storeOpensAt: Date, storeClosesAt: Date): boolean {
-    const startMomentDate = moment(storeOpensAt, "YYYY-MM-DDTHH:mm:ss");
-    const endMomentDate = moment(storeClosesAt, "YYYY-MM-DDTHH:mm:ss");
-    const currentDate = moment();
+    const startDate = dayjs(storeOpensAt, "YYYY-MM-DDTHH:mm");
+    const endDate = dayjs(storeClosesAt, "YYYY-MM-DDTHH:mm");
+    const currentDate = dayjs(new Date());
 
     // Set the current date to compare correctly
-    startMomentDate.date(currentDate.date());
-    endMomentDate.date(currentDate.date());
+    startDate.date(currentDate.date());
+    endDate.date(currentDate.date());
 
-    // Check if the date/hour is between the start and end dates, include
-    return currentDate.isBetween(startMomentDate, endMomentDate, "minutes", "[]");
+    return currentDate.isBetween(startDate, endDate, "minutes", "[]");
   }
 }
 

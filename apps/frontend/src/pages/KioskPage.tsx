@@ -31,14 +31,12 @@ function KioskPage() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  if (isLoading) {
+    return "Loading Spinner TODO";
+  }
+
   return (
     <>
-      {isLoading && "Loading Spinner TODO"}
-
-      {error && "Message error TODO"}
-
-      {kiosks.length === 0 && "Message empty TODO"}
-
       <Button
         variant="contained"
         color="success"
@@ -50,9 +48,19 @@ function KioskPage() {
         Create Kiosk
       </Button>
 
-      <KioskForm open={openKioskForm} handleCancel={() => setOpenKioskForm(false)} />
+      <KioskForm
+        open={openKioskForm}
+        handleCancel={() => setOpenKioskForm(false)}
+        setKiosks={setKiosks}
+      />
 
-      {kiosks.length > 0 && <KioskTable kiosks={kiosks} handleDelete={handleDelete} />}
+      {error && "Message error TODO"}
+
+      {kiosks.length === 0 && "Message empty TODO"}
+
+      {!isLoading && !error && kiosks.length > 0 && (
+        <KioskTable kiosks={kiosks} handleDelete={handleDelete} />
+      )}
 
       <DeleteDialog
         kioskId={deleteKioskId}

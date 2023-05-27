@@ -60,8 +60,8 @@ const KioskTable: React.FC<Props> = ({ kiosks, handleDelete }) => {
                   {kiosk.description}
                 </TableCell>
                 <TableCell>{kiosk.isKioskClosed ? "Yes" : "No"}</TableCell>
-                <TableCell>{dayjs(kiosk.storeOpensAt).format("YYYY-MM-DD HH:mm")}</TableCell>
-                <TableCell>{dayjs(kiosk.storeClosesAt).format("YYYY-MM-DD HH:mm")}</TableCell>
+                <TableCell>{dayjs(kiosk.storeOpensAt).format("LT")}</TableCell>
+                <TableCell>{dayjs(kiosk.storeClosesAt).format("LT")}</TableCell>
                 <TableCell>
                   {
                     <IconButton onClick={handleEdit}>

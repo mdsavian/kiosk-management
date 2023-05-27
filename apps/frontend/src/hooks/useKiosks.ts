@@ -1,5 +1,4 @@
 import axios from "axios";
-import * as React from "react";
 import { KioskDTO } from "types";
 
 const KIOSK_URL = `${import.meta.env.VITE_API_URL}/kiosks`;
@@ -13,7 +12,11 @@ const useKiosks = () => {
     return await axios.delete(`${KIOSK_URL}/${kioskId}`);
   };
 
-  return { fetchKiosks, deleteKiosk };
+  const createKiosk = async (kiosk: Partial<KioskDTO>) => {
+    return await axios.post(KIOSK_URL, kiosk);
+  };
+
+  return { fetchKiosks, deleteKiosk, createKiosk };
 };
 
 export default useKiosks;

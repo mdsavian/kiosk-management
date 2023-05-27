@@ -9,19 +9,48 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import CustomDateTimePicker from "./CustomDateTimePicker";
+import TimePicker from "./CustomTimePicker";
 import { KioskDTO } from "types";
 import * as dayjs from "dayjs";
+import useKiosks from "../hooks/useKiosks";
 
 type Props = {
   kiosk?: KioskDTO;
   open: boolean;
   handleCancel: () => void;
+  setKiosks: React.Dispatch<React.SetStateAction<KioskDTO[]>>;
 };
 
-const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel }) => {
-  const [newKiosk, setNewKiosk] = React.useState<KioskDTO | undefined>(kiosk);
-  const title = kiosk?._id ? "Edit" : "Create";
+const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel, setKiosks }) => {
+  const { createKiosk } = useKiosks();
+
+  const initKiosk: KioskDTO = kiosk || {
+    storeClosesAt: dayjs(new Date()).add(1, "minutes").toDate(),
+    storeOpensAt: dayjs(new Date()).toDate(),
+  };
+
+  const [newKiosk, setNewKiosk] = React.useState<KioskDTO | undefined>(initKiosk);
+  const isEditing = !!kiosk?._id;
+  const title = isEditing ? "Edit" : "Create";
+
+  const handleCreateKiosk = async () => {
+    if (!newKiosk) {
+      return;
+    }
+
+    await createKiosk(newKiosk)
+      .then((response) => {
+        setKiosks((prevState) => [...prevState, response.data.data]);
+
+        // TODO customize the alert
+        alert("Kiosk created successfully");
+        closeDialog();
+      })
+      .catch((error) => {
+        // TODO customize the alert
+        alert(error.response.data);
+      });
+  };
 
   const handleChangeKiosk = (field: Partial<KioskDTO>) => {
     setNewKiosk((prevState) => {
@@ -71,17 +100,17 @@ const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel }) => {
           label="Closed"
         />
 
-        <CustomDateTimePicker
-          value={dayjs(newKiosk?.storeOpensAt ?? new Date())}
+        <TimePicker
+          value={dayjs(newKiosk?.storeOpensAt)}
           label="Opens At"
           onChange={(value) => {
+            console.log(value);
             handleChangeKiosk({ storeOpensAt: dayjs(value).toDate() });
           }}
         />
 
-        <CustomDateTimePicker
-          minDateTime={dayjs(new Date())}
-          value={dayjs(newKiosk?.storeClosesAt ?? new Date())}
+        <TimePicker
+          value={dayjs(newKiosk?.storeClosesAt)}
           label="Closes At"
           onChange={(value) => {
             handleChangeKiosk({ storeClosesAt: dayjs(value).toDate() });
@@ -90,7 +119,12 @@ const KioskForm: React.FC<Props> = ({ kiosk, open, handleCancel }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={closeDialog}>Cancel</Button>
-        <Button onClick={() => {}} variant="contained" color="success">
+        <Button
+          disabled={!newKiosk}
+          onClick={handleCreateKiosk}
+          variant="contained"
+          color="success"
+        >
           Save
         </Button>
       </DialogActions>

@@ -74,7 +74,9 @@ function KioskPage() {
         />
       )}
 
-      {kiosks.length === 0 && <Alert severity="warning">Kiosks not found</Alert>}
+      {!isLoading && !error && kiosks.length === 0 && (
+        <Alert severity="warning">Kiosks not found</Alert>
+      )}
 
       {!isLoading && !error && kiosks.length > 0 && (
         <KioskTable kiosks={kiosks} handleDelete={handleDelete} handleEdit={handleEdit} />

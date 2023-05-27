@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import TimePicker from "./CustomTimePicker";
+import TimePicker from "./common/CustomTimePicker";
 import { KioskDTO } from "types";
 import * as dayjs from "dayjs";
 import useKiosks from "../hooks/useKiosks";
@@ -42,6 +42,17 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
     }
 
     isProcessing.current = true;
+
+    if (newKiosk.storeClosesAt && newKiosk.storeOpensAt) {
+      const closeHour = dayjs(newKiosk.storeClosesAt);
+      const openHour = dayjs(newKiosk.storeOpensAt);
+
+      if (closeHour.isBefore(openHour) || closeHour.isSame(openHour)) {
+        displaySnackbar("Closing time must be later than the opening time", "error");
+        isProcessing.current = false;
+        return;
+      }
+    }
 
     if (isEditing) {
       await updateKiosk(newKiosk)
@@ -125,6 +136,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
         />
 
         <TimePicker
+          minTime={dayjs(newKiosk?.storeOpensAt).add(1, "minute")}
           value={dayjs(newKiosk?.storeClosesAt)}
           label="Closes At"
           onChange={(value) => {

@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as dayjs from "dayjs";
 import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";

@@ -3,23 +3,22 @@ import * as dayjs from "dayjs";
 import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { TimePicker } from "@mui/x-date-pickers";
 
 type Props = {
   label: string;
   value: Dayjs;
   onChange: (value: Dayjs | null) => void;
-  minDateTime?: Dayjs;
+  minTime?: Dayjs;
 };
 
-const CustomDateTimePicker: React.FC<Props> = ({ label, value, onChange, minDateTime }) => {
+const CustomTimePicker: React.FC<Props> = ({ label, value, onChange, minTime }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateTimePicker
-        minDateTime={minDateTime}
+      <TimePicker
+        minTime={minTime}
         sx={{ width: "100%", marginTop: "16px", marginBottom: "8px" }}
         label={label}
-        defaultValue={dayjs(new Date())}
         value={value}
         onChange={onChange}
       />
@@ -27,4 +26,4 @@ const CustomDateTimePicker: React.FC<Props> = ({ label, value, onChange, minDate
   );
 };
 
-export default CustomDateTimePicker;
+export default CustomTimePicker;

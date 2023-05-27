@@ -1,37 +1,56 @@
-# Turborepo kitchen sink starter
+# Introduction
 
-This is an official starter Turborepo with multiple meta-frameworks all working in harmony and sharing packages.
+The project is a monorepo created with [TurboRepo](https://turbo.build/repo).
 
-## Using this example
+The backend was made in Node.js with Express and MongoDB. It consists of a CRUD for managing kiosks and a cron job that closes or opens a kiosk based on time fields.
 
-Run the following command:
+The frontend was made in React with Vite, it lists all kiosks in a table and provides functionalities to create, edit and delete kiosks.
 
-```sh
-npx create-turbo@latest -e kitchen-sink
+## Quick start 🏃🏽‍♀️
+
+First, make sure you have installed a recent [npm](https://nodejs.org/en/download/) version (Node 16 or later).
+
+After setting everything up, clone this repo:
+
+```
+$ git clone git@github.com:mdsavian/kiosk-management.git
 ```
 
-## What's inside?
+Install all dependencies:
 
-This Turborepo includes the following packages and apps:
+```
+$ npm install
+```
 
-### Apps and Packages
+### For the project to work you need to have a MongoDB base.
 
-- `api`: an [Express](https://expressjs.com/) server
-- `storefront`: a [Next.js](https://nextjs.org/) app
-- `admin`: a [Vite](https://vitejs.dev/) single page app
-- `blog`: a [Remix](https://remix.run/) blog
-- `logger`: isomorphic logger (a small wrapper around console.log)
-- `ui`: a dummy React UI library (which contains a single `<CounterButton>` component)
-- `scripts`: Jest and ESLint configurations
-- `tsconfig`: tsconfig.json;s used throughout the monorepo
+You can use MongoDB locally on your machine or use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) which is free.
 
-Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
+### After creating your database, you need to follow these steps to run the backend project:
 
-### Utilities
+- `cd apps\backend`
+- Rename the `.env.example` to `.env`
+- Update the `DB_URI` with your database URI
+- Run `npm run dev`
 
-This Turborepo has some additional tools already setup for you:
+Your terminal should be displaying something like: `Backend api is running on http://localhost:3002`
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Jest](https://jestjs.io) test runner for all things JavaScript
-- [Prettier](https://prettier.io) for code formatting
+### With the backend running now we are ready to run the frontend.
+
+For this, follow these steps:
+
+- Open a new terminal
+- Go to the `apps/frontend` folder
+- Rename the `.env.example` to `.env`
+- Update the `VITE_API_URL` with the URL that was displayed in the terminal where we ran the backend
+- Run `npm run dev`
+
+Now you can enjoy it! ;)
+
+## Future improvements
+
+- Create unit tests (backend and frontend)
+- Implement a WebSocket to listen for changes on the backend
+- Use a logging library like winston
+- Validate the required fields
+- Improve the page with a header and footer

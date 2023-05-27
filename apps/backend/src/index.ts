@@ -12,7 +12,7 @@ connectDB();
 const server = createServer();
 
 server.listen(port, () => {
-  console.log(`Backend api is running on ${port}`);
+  console.log(`Backend api is running on http://localhost:${port}`);
 });
 
 closeOpenKioskJob();

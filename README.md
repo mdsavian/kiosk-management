@@ -54,3 +54,5 @@ Now you can enjoy it! ;)
 - Use a logging library like winston
 - Validate the required fields
 - Improve the page with a header and footer
+- Implement pagination on table
+- Create a close button on the table to close the kiosk easily

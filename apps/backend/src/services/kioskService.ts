@@ -14,6 +14,10 @@ class KioskService {
     return await KioskModel.findOne({ _id: id }).lean();
   }
 
+  async getBySerialKey(serialKey: string) {
+    return await KioskModel.findOne({ serialKey: serialKey }).lean();
+  }
+
   async update(id: string, kioskDto: KioskDTO) {
     let kioskToUpdate = kioskDto;
 

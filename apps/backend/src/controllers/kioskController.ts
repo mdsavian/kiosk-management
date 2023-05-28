@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import KioskService from "../services/kioskService";
+import kioskService from "../services/kioskService";
 
 class KioskController {
   constructor() {}
@@ -35,9 +36,17 @@ class KioskController {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const { serialKey } = req.body;
 
       if (!id) {
         throw new Error("Id can not be empty");
+      }
+
+      if (serialKey) {
+        const kioskSerialKey = await kioskService.getBySerialKey(serialKey);
+        if (kioskSerialKey !== null && !kioskSerialKey._id.equals(id)) {
+          throw new Error("There is already a kiosk with that serial key");
+        }
       }
 
       const kiosk = await KioskService.getById(id);
@@ -84,12 +93,18 @@ class KioskController {
 
   async create(req: Request, res: Response) {
     try {
+      const { serialKey } = req.body;
+
+      if (serialKey && (await kioskService.getBySerialKey(serialKey)) !== null) {
+        throw new Error("There is already a kiosk with that serial key");
+      }
+
       const kiosk = await KioskService.create(req.body);
 
       return res.status(200).send({ data: kiosk });
     } catch (error) {
-      console.error(`Error updating kiosk, ${error}`);
-      return res.status(500).send(`Error updating kiosk, ${error}`);
+      console.error(`Error creating kiosk, ${error}`);
+      return res.status(500).send(`Error creating kiosk, ${error}`);
     }
   }
 }

@@ -54,6 +54,12 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
       }
     }
 
+    if (!newKiosk.serialKey) {
+      displaySnackbar("Serial key is required", "error");
+      isProcessing.current = false;
+      return;
+    }
+
     if (isEditing) {
       await updateKiosk(newKiosk)
         .then((response) => {
@@ -100,6 +106,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
       <DialogContent>
         <TextField
           label="Serial Key"
+          required
           value={newKiosk?.serialKey ?? ""}
           onChange={(event) => {
             handleChangeKiosk({ serialKey: event.target.value });

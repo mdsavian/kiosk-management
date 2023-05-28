@@ -3,7 +3,8 @@ import { KioskDTO } from "types";
 import useKiosks from "../hooks/useKiosks";
 import KioskTable from "../components/KioskTable";
 import DeleteDialog from "../components/DeleteDialog";
-import { Alert, Button, Typography } from "@mui/material";
+import { Alert, Button, Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import KioskForm from "../components/KioskForm";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 
@@ -16,6 +17,16 @@ function KioskPage() {
   const [deleteKioskId, setDeleteKioskId] = React.useState<string>("");
   const [openKioskForm, setOpenKioskForm] = React.useState<boolean>(false);
   const [kioskToEdit, setKioskToEdit] = React.useState<KioskDTO | undefined>(undefined);
+
+  const [searchTerm, setSearchTerm] = React.useState<string>("");
+
+  const filteredKiosks = !searchTerm
+    ? kiosks
+    : kiosks.filter(
+        (kiosk) =>
+          kiosk.serialKey?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          kiosk.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
   const handleDelete = (kioskId: string) => {
     setDeleteKioskId(kioskId);
@@ -53,16 +64,39 @@ function KioskPage() {
   return (
     <>
       <Typography variant="h3">Kiosk Management</Typography>
-      <Button
-        variant="contained"
-        color="success"
-        sx={{ alignSelf: "flex-end" }}
-        onClick={() => {
-          setOpenKioskForm(true);
-        }}
-      >
-        Create Kiosk
-      </Button>
+
+      <Grid container direction="row">
+        <TextField
+          label="Search"
+          variant="outlined"
+          size="small"
+          onChange={(event) => {
+            setSearchTerm(event.target.value);
+          }}
+          sx={{
+            marginRight: "32px",
+            width: "500px",
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ marginLeft: "auto" }}
+          onClick={() => {
+            setOpenKioskForm(true);
+          }}
+        >
+          Create Kiosk
+        </Button>
+      </Grid>
 
       {openKioskForm && (
         <KioskForm
@@ -76,7 +110,7 @@ function KioskPage() {
       )}
 
       {!isLoading && !error && (
-        <KioskTable kiosks={kiosks} handleDelete={handleDelete} handleEdit={handleEdit} />
+        <KioskTable kiosks={filteredKiosks} handleDelete={handleDelete} handleEdit={handleEdit} />
       )}
 
       {deleteKioskId && (

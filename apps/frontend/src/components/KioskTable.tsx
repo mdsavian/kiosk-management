@@ -2,6 +2,7 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import {
+  Alert,
   IconButton,
   Paper,
   Table,
@@ -31,6 +32,18 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+const EmptyTable = () => {
+  return (
+    <TableRow>
+      <TableCell colSpan={7} align="center">
+        <Alert severity="warning" sx={{ justifyContent: "center" }}>
+          No Kiosks found
+        </Alert>
+      </TableCell>
+    </TableRow>
+  );
+};
+
 const KioskTable: React.FC<Props> = ({ kiosks, handleDelete, handleEdit }) => {
   return (
     <TableContainer component={Paper}>
@@ -48,6 +61,7 @@ const KioskTable: React.FC<Props> = ({ kiosks, handleDelete, handleEdit }) => {
         </TableHead>
 
         <TableBody>
+          {kiosks.length === 0 && <EmptyTable />}
           {kiosks.map((kiosk, index) => (
             <TableRow key={`${kiosk.serialKey} ${index}`}>
               <TableCell component="th" scope="row">

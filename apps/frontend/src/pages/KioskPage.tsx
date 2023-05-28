@@ -3,10 +3,9 @@ import { KioskDTO } from "types";
 import useKiosks from "../hooks/useKiosks";
 import KioskTable from "../components/KioskTable";
 import DeleteDialog from "../components/DeleteDialog";
-import { Alert, Button } from "@mui/material";
+import { Alert, Button, Typography } from "@mui/material";
 import KioskForm from "../components/KioskForm";
 import LoadingSpinner from "../components/common/LoadingSpinner";
-import CustomSnackbar from "../components/common/SnackBar";
 
 function KioskPage() {
   const { fetchKiosks } = useKiosks();
@@ -17,7 +16,6 @@ function KioskPage() {
   const [deleteKioskId, setDeleteKioskId] = React.useState<string>("");
   const [openKioskForm, setOpenKioskForm] = React.useState<boolean>(false);
   const [kioskToEdit, setKioskToEdit] = React.useState<KioskDTO | undefined>(undefined);
-  const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
 
   const handleDelete = (kioskId: string) => {
     setDeleteKioskId(kioskId);
@@ -54,6 +52,7 @@ function KioskPage() {
 
   return (
     <>
+      <Typography variant="h3">Kiosk Management</Typography>
       <Button
         variant="contained"
         color="success"
@@ -76,11 +75,7 @@ function KioskPage() {
         />
       )}
 
-      {!isLoading && !error && kiosks.length === 0 && (
-        <Alert severity="warning">Kiosks not found</Alert>
-      )}
-
-      {!isLoading && !error && kiosks.length > 0 && (
+      {!isLoading && !error && (
         <KioskTable kiosks={kiosks} handleDelete={handleDelete} handleEdit={handleEdit} />
       )}
 

@@ -66,6 +66,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
           handleClose();
         })
         .catch((error) => {
+          isProcessing.current = false;
           displaySnackbar(error.response.data, "error");
         });
     } else {
@@ -78,6 +79,7 @@ const KioskForm: React.FC<Props> = ({ kiosk, handleClose, setKiosks }) => {
           handleClose();
         })
         .catch((error) => {
+          isProcessing.current = false;
           displaySnackbar(error.response.data, error);
         });
     }

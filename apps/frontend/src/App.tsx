@@ -5,6 +5,7 @@ import ProductsPage from "./pages/ProductsPage";
 import SnackbarProvider from "./components/common/SnackBar/SnackbarProvider";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import CartPage from "./pages/CartPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,7 +23,11 @@ function App() {
     },
     {
       path: "cart",
-      element: <div>Cart</div>,
+      element: (
+        <RecoilRoot>
+          <CartPage />
+        </RecoilRoot>
+      ),
     },
   ]);
 

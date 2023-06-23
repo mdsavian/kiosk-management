@@ -56,3 +56,15 @@ Now you can enjoy it! ;)
 - Improve the page with a header and footer
 - Implement pagination on table
 - Create a close button on the table to close the kiosk easily
+
+## Products and Cart
+
+I added two new routes: `/products` and `/cart` to study [Recoil](https://recoiljs.org/) and [Tailwind](https://tailwindcss.com/).
+
+On `ProductsPage`, you can add items to a cart and go to the `CartPage`.
+
+These items are stored in a state called `cartState`.
+
+This state is shared between CartPage and ProductsPage.
+
+In CartPage I'm using a selector (`cartSelector`) to calculate the items total and the cart total.

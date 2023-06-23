@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./App.css";
 import KioskPage from "./pages/KioskPage";
+import ProductsPage from "./pages/ProductsPage";
 import SnackbarProvider from "./components/common/SnackBar/SnackbarProvider";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
@@ -12,7 +13,7 @@ function App() {
     },
     {
       path: "products",
-      element: <div>Add Products</div>,
+      element: <ProductsPage />,
     },
     {
       path: "cart",

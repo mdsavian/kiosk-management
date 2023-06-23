@@ -1,3 +1,4 @@
+import { Product } from "types";
 import coca from "./images/coca.jpeg";
 import fruki from "./images/fruki.jpeg";
 import guarana from "./images/guarana.jpeg";
@@ -9,7 +10,7 @@ import pao from "./images/pao-leite.png";
 import pepsi from "./images/pepsi.jpeg";
 import sukita from "./images/sukita.webp";
 
-const products = [
+const products: Product[] = [
   { id: "A1", description: "Coca Cola", price: 7.25, image: coca },
   { id: "A5", description: "Fruki", price: 4.5, image: fruki },
   { id: "A3", description: "Guaraná Antarctica", price: 6.15, image: guarana },

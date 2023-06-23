@@ -6,3 +6,15 @@ export type KioskDTO = {
   storeOpensAt?: Date;
   storeClosesAt?: Date;
 };
+
+export type Product = {
+  id: string;
+  description: string;
+  price: number;
+  image: string;
+};
+
+export type ProductCart = {
+  product: Product;
+  quantity: number;
+};
